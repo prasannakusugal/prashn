@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+<link rel="stylesheet" type="text/css" href="static/style.css">
+ 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+ 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<title>Question papert</title>
+	
+    <script src="{{ url_for('static',filename='jquery.min.js')}}"></script> 
+</head>
+<body>
+<div class="head">
+  <h1 id="title">Welcome</h1>
+	<h3 name="h" style="margin-left: 20px;">Name: student id automatically comes in and name also</h3>
+
+<div class="container" > 
+<form id="form" name="paper" method="POST" onsubmit="return validate()" action="/validation">
+	<input type="text" name="details"  id="details" value="0"  style="display: none;">
+	
+
+</form>
+</div>
+</div>
+<script type="text/javascript">
+	  
+let details={};
+function res(){
+	 $.ajax({
+ url:"/up",
+
+ data:{"lk":0},
+ success:function(data)
+{
+	details=data;
+	
+renderform();
+ console.log(data);
+}   
+});
+
+}
+res();
+let answers={};
+let result={};
+function validate(){	
+	// body...
+	let len=Object.keys(details).length;
+	let score=0;
+		for (var i = 1; i < len; i++) {
+			//console.log(details[i]);
+			let ob=details[i];
+			if(answers[i]==ob["answer"]){
+				result[i]=[answers[i],1];
+				score+=1;
+			}
+			else{
+				result[i]=[answers[i],0];
+			}
+		
+}
+result["score"]=score;	
+result["id"]=1;	
+
+console.log(result);
+document.getElementById("details").value=JSON.stringify(result);;
+
+			return(true);
+
+}
+ function insertans(a,ans) {
+ 	// body...
+ 	 	answers[a]=ans;
+ //	console.log(answers);
+ 
+ }
+	function renderform() {
+		// body...
+		let len=Object.keys(details).length;
+		
+		document.getElementById('title').innerHTML= details["title"];
+		for (var i = 1; i < len; i++) {
+			//console.log(details[i]);
+			let ob=details[i];
+			answers[i]=null;
+
+				let div = document.createElement("div");
+				div.className="form";
+			if (ob["type"]=="tf") {
+				//alert("gg");
+				let cnt= '<label>'+i+'. '+ob["question"]+'</label> <div class="MCQ"> <div><input type="radio"  name="'+ob["id"]+'ans" value="true" id="'+ob["id"]+'true" onclick="insertans('+i+','+"'True'"+')" ><label>True</label></div><div><input type="radio"  name="'+ob["id"]+'ans" value="False" id="'+ob["id"]+'false" onclick="insertans('+i+','+"'False'"+')" ><label>False</label></div></div>';
+				div.innerHTML=cnt;
+		document.getElementById('form').append(div);
+			}
+			else 	if (ob["type"]=="mcq") {
+				//alert("gg");
+				let ok=ob["options"];
+				let op_len=Object.keys(ok).length;
+			
+				console.log(op_len);
+				let options="<div class='MCQ'>";
+				for (var k = 1; k<= op_len; k++) {
+					options=options+'<div><input type="radio"  name="'+ob["id"]+'ans" value="'+k+'" onclick="insertans('+ob["id"]+','+k+')"  ><label>'+ok[k]+'</label></div>';
+				}
+				let cnt= '<label>'+i+'. '+ob["question"]+'</label>'+options+"</div>";
+
+				div.innerHTML=cnt;
+		document.getElementById('form').append(div);
+			}
+		}
+
+		let div = document.createElement("div");
+		div.innerHTML='<input type="submit"  name="Submit" class="btn btn-primary" style="width: 10%; margin: 20px;padding: 8px;font-size:18px	">';
+	document.getElementById('form').append(div);
+
+	}
+
+
+</script>
+</body>
+</html>

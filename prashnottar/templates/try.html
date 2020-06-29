@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static',filename='jquery.min.js')}}"></script>  
+
+    <title>Document</title>
+</head>
+<body>
+<form method="POST" action="/upd">
+    <input type="submit" name="submit">
+    <textarea>'{"title": "First Question Paper"}'</textarea>
+    <input type="text" name="lk" value='{"title": "First Question Paper"}'>
+</form>
+    <script>
+
+           function res(){
+                $.ajax({
+            url:"/up",
+        
+            data:{"lk":0},
+            success:function(data)
+        {
+            console.log(data);
+        }   
+        });
+        
+        }
+      //  res();
+    </script>
+</body>
+</html>
