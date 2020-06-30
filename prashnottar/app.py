@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 from flask_mail import Mail
 import json
 import os
@@ -19,10 +19,18 @@ def home():
 
 @app.route('/create')
 def create():
-    return render_template('create.html')
+
+    script="create"
+    return render_template('create.html',script=script)
+@app.route('/edit')
+def edit():
+    script="edit"
+    return render_template('create.html',script=script)
+
 @app.route('/question')
 def question():
     return render_template('question.html')
+
 
 
 @app.route('/upd',methods = ['GET', 'POST'])
